@@ -1,0 +1,497 @@
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{setspace}
+
+% Page geometry
+\geometry{
+    a4paper,
+    left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
+
+% Colors
+\definecolor{primaryblue}{HTML}{0d2840}
+\definecolor{secondaryblue}{HTML}{1a5276}
+\definecolor{accentgreen}{HTML}{1e8449}
+\definecolor{accentorange}{HTML}{d35400}
+\definecolor{lightgray}{HTML}{f8f9fa}
+\definecolor{darkgray}{HTML}{1a252f}
+\definecolor{insightbg}{HTML}{fef9e7}
+\definecolor{insightborder}{HTML}{f7dc6f}
+\definecolor{codebg}{HTML}{f4f4f4}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=secondaryblue,
+    citecolor=accentgreen
+}
+
+% Header/Footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{darkgray}{\small UIDAI Hackathon 2026}}
+\fancyhead[R]{\textcolor{darkgray}{\small The Aadhaar Lifecycle}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Section formatting
+\titleformat{\section}
+    {\Large\bfseries\color{primaryblue}}
+    {\thesection.}{0.5em}{}[\titlerule]
+    
+\titleformat{\subsection}
+    {\large\bfseries\color{secondaryblue}}
+    {\thesubsection}{0.5em}{}
+
+% Insight box
+\newtcolorbox{insightbox}[1][]{
+    colback=insightbg,
+    colframe=insightborder,
+    fonttitle=\bfseries,
+    title=#1,
+    boxrule=1pt,
+    arc=3pt
+}
+
+% Code listing style
+\lstset{
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{gray},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{primaryblue},
+    commentstyle=\color{accentgreen},
+    stringstyle=\color{accentorange}
+}
+
+% Custom commands
+\newcommand{\highlight}[1]{\textbf{\textcolor{primaryblue}{#1}}}
+\newcommand{\stat}[1]{\textbf{#1}}
+
+% Set default text color to darker shade
+\color{darkgray}
+
+\begin{document}
+
+% =============================================================================
+% TITLE PAGE
+% =============================================================================
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries\color{primaryblue} The Aadhaar Lifecycle\par}
+    \vspace{0.5cm}
+    {\Large\color{secondaryblue} Age-Driven Patterns in Enrolment and Updates\par}
+    
+    \vspace{2cm}
+    
+    \includegraphics[width=0.8\textwidth]{fig2_aadhaar_lifecycle.png}
+    
+    \vspace{2cm}
+    
+    {\large\color{darkgray}
+    \textbf{UIDAI Online Hackathon on Data-Driven Innovation}\\[0.3cm]
+    Organised by Unique Identification Authority of India (UIDAI)\\
+    in association with National Informatics Centre (NIC), MeitY
+    \par}
+    
+    \vspace{1.5cm}
+    
+    \begin{tabular}{rl}
+        \textbf{Participant:} & Siddhi Rohan \\
+        \textbf{Problem Statement:} & Unlocking Societal Trends in Aadhaar Data \\
+        \textbf{Date:} & 11th January 2026 \\
+    \end{tabular}
+    
+    \vfill
+\end{titlepage}
+
+% =============================================================================
+% TABLE OF CONTENTS
+% =============================================================================
+\tableofcontents
+\newpage
+
+% =============================================================================
+% EXECUTIVE SUMMARY
+% =============================================================================
+\section{Executive Summary}
+
+This analysis examines approximately \stat{5 million records} from UIDAI's anonymized datasets covering Aadhaar enrolments, demographic updates, and biometric updates from March to December 2025. The central finding reveals a clear \highlight{``Aadhaar Lifecycle''} pattern where different age groups interact with the Aadhaar system at predictable life stages, creating opportunities for targeted infrastructure planning and policy optimization.
+
+\begin{insightbox}[Key Findings]
+\begin{itemize}[leftmargin=*]
+    \item \textbf{65\% of new enrolments are children aged 0-5} (Baal Aadhaar), indicating successful birth-registration linkage
+    \item \textbf{49\% of biometric updates are for school-age children (5-17)}, suggesting school-linked Aadhaar requirements
+    \item \textbf{90\% of demographic updates are by adults}, reflecting life events like address changes and marriage
+    \item \textbf{Saturday shows 172\% higher demographic update volume} compared to weekdays
+    \item \textbf{Significant geographic concentration}: UP, Bihar, and MP account for 40\%+ of all activity
+\end{itemize}
+\end{insightbox}
+
+% =============================================================================
+% PROBLEM STATEMENT AND APPROACH
+% =============================================================================
+\section{Problem Statement and Approach}
+
+\subsection{Problem Statement}
+\textit{Identify meaningful patterns, trends, anomalies, or predictive indicators in Aadhaar enrolment and update data, and translate them into clear insights or solution frameworks that can support informed decision-making and system improvements.}
+
+\subsection{Analytical Approach}
+
+Rather than treating the three datasets independently, this analysis adopts a \textbf{lifecycle perspective}, examining how Indian citizens interact with Aadhaar across different life stages:
+
+\begin{enumerate}
+    \item \textbf{Birth} $\rightarrow$ New enrolment (Baal Aadhaar)
+    \item \textbf{School entry} $\rightarrow$ Biometric updates (for scholarships, mid-day meals)
+    \item \textbf{Adult life} $\rightarrow$ Demographic updates (address changes, marriage, employment)
+\end{enumerate}
+
+This lifecycle framework allows UIDAI to anticipate demand patterns, optimize infrastructure placement, and design targeted outreach programs for each life stage.
+
+% =============================================================================
+% DATASETS USED
+% =============================================================================
+\section{Datasets Used}
+
+Three anonymized datasets provided by UIDAI were analyzed:
+
+\begin{table}[H]
+\centering
+\caption{Dataset Overview}
+\label{tab:datasets}
+\rowcolors{2}{lightgray}{white}
+\begin{tabular}{llll}
+\toprule
+\rowcolor{primaryblue}
+\textcolor{white}{\textbf{Dataset}} & \textcolor{white}{\textbf{Records}} & \textcolor{white}{\textbf{Date Range}} & \textcolor{white}{\textbf{Key Columns}} \\
+\midrule
+Enrolment & 1,005,889 & Mar--Dec 2025 & date, state, district, pincode, age groups \\
+Demographic Updates & 2,071,160 & Mar--Dec 2025 & date, state, district, pincode, age groups \\
+Biometric Updates & 1,860,884 & Mar--Dec 2025 & date, state, district, pincode, age groups \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Geographic and Temporal Coverage}
+
+\begin{itemize}
+    \item \textbf{States/UTs:} 37
+    \item \textbf{Districts:} 983
+    \item \textbf{Unique Pincodes:} 19,462
+    \item \textbf{Total Transactions:} 124.5 million (5.4M enrolments + 49.3M demographic + 69.8M biometric)
+\end{itemize}
+
+% =============================================================================
+% METHODOLOGY
+% =============================================================================
+\section{Methodology}
+
+\subsection{Data Loading and Integration}
+
+All CSV files were loaded using pandas and concatenated into three master DataFrames. Date columns were parsed into datetime format for temporal analysis. Total volume columns were computed by summing age-group specific counts.
+
+\subsection{Data Cleaning and Preprocessing}
+
+A significant data quality issue was discovered: \textbf{68 unique ``state'' values existed instead of the expected 36--37}. This was caused by:
+
+\begin{itemize}
+    \item \textbf{Case variations:} `West Bengal', `west Bengal', `WEST BENGAL', `Westbengal' (8 variants)
+    \item \textbf{Spelling errors:} `West Bangal', `Chhatisgarh', `Orissa' (legacy name)
+    \item \textbf{Cities stored as states:} `Darbhanga', `Jaipur', `Nagpur'
+    \item \textbf{Inconsistent naming:} `Jammu and Kashmir' vs `Jammu \& Kashmir'
+\end{itemize}
+
+A state normalization mapping was created to consolidate these variations. Records with invalid state values ($\sim$0.01\% of data) were filtered out.
+
+\subsection{Feature Engineering}
+
+Additional temporal features were derived:
+\begin{itemize}
+    \item \texttt{month}: Period representation for monthly aggregation
+    \item \texttt{day\_of\_week}: Weekday name for weekly pattern analysis
+    \item \texttt{is\_weekend}: Boolean flag for weekend vs weekday comparison
+    \item \texttt{day}: Day of month for first-of-month anomaly detection
+\end{itemize}
+
+\subsection{Analysis Framework}
+
+\begin{itemize}
+    \item \textbf{Univariate Analysis:} Distribution of activity across age groups, states, time periods
+    \item \textbf{Bivariate Analysis:} Correlation between enrolment and update patterns; age group vs activity type
+    \item \textbf{Trivariate Analysis:} State $\times$ Age Group $\times$ Activity Type interactions
+    \item \textbf{Anomaly Detection:} Identification of outliers in daily volumes and geographic distributions
+\end{itemize}
+
+% =============================================================================
+% DATA ANALYSIS AND VISUALISATION
+% =============================================================================
+\section{Data Analysis and Visualisations}
+
+\subsection{Finding 1: The Aadhaar Lifecycle}
+
+The most significant finding is the clear lifecycle pattern in Aadhaar interactions. Different age groups dominate different types of activities, reflecting their life stage needs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig2_aadhaar_lifecycle.png}
+    \caption{The Aadhaar Lifecycle: Activity distribution across age groups showing distinct patterns for each life stage.}
+    \label{fig:lifecycle}
+\end{figure}
+
+\begin{insightbox}[Policy Implication]
+This lifecycle pattern suggests three distinct ``touchpoints'' for UIDAI service optimization:
+\begin{enumerate}
+    \item \textbf{Birth Registration Centers} -- 65\% of enrolments are infants
+    \item \textbf{Schools} -- 49\% of biometric updates are for ages 5--17
+    \item \textbf{Service Centers} -- 90\% of demographic updates are adults
+\end{enumerate}
+\end{insightbox}
+
+\subsection{Finding 2: Activity Volume Distribution}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig1_volume_overview.png}
+    \caption{Overall volume comparison showing biometric updates dominating (69.8M), followed by demographic updates (49.3M), and new enrolments (5.4M).}
+    \label{fig:volume}
+\end{figure}
+
+The massive volume difference between updates (119M combined) and new enrolments (5.4M) indicates that Aadhaar has achieved near-universal coverage, with the system now primarily handling maintenance rather than expansion.
+
+\subsection{Finding 3: Weekend Surge in Demographic Updates}
+
+Analysis of day-of-week patterns reveals a striking behavioral insight: demographic updates show \textbf{172\% higher volume on weekends} compared to weekdays, while enrolments show the opposite pattern.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig3_weekly_patterns.png}
+    \caption{Weekly patterns showing the Saturday spike in demographic updates -- working adults prefer updating on their day off.}
+    \label{fig:weekly}
+\end{figure}
+
+\begin{insightbox}[Recommendation]
+The Saturday surge (15.6M vs weekday average of 4.9M) indicates working adults prefer to update Aadhaar on days off. UIDAI should consider:
+\begin{itemize}
+    \item Extended Saturday hours at high-volume urban centers
+    \item Online/digital update options to reduce center congestion
+    \item Appointment systems to incentivize weekday visits
+\end{itemize}
+\end{insightbox}
+
+\subsection{Finding 4: Geographic Distribution}
+
+Aadhaar activity is heavily concentrated in populous states. Uttar Pradesh alone accounts for 18.7\% of all enrolments.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig4_geographic.png}
+    \caption{Left: Top 15 states by enrolment volume. Right: Child (0--5) enrolment percentage by state -- higher percentages indicate mature ecosystems where adults already have Aadhaar.}
+    \label{fig:geographic}
+\end{figure}
+
+\textbf{Notable Pattern:} States like Tamil Nadu (82.6\%), Karnataka (80.3\%), and Maharashtra (75.5\%) show very high child enrolment percentages, indicating mature Aadhaar ecosystems. In contrast, Bihar (43.1\%) and Meghalaya (19.3\%) show more balanced distributions, suggesting ongoing adult enrolment drives.
+
+\subsection{Finding 5: Monthly Trends}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig5_monthly_trends.png}
+    \caption{Monthly activity trends showing March 2025 spike in demographic updates (fiscal year-end) and gradual increase in enrolments toward year-end.}
+    \label{fig:monthly}
+\end{figure}
+
+March 2025 shows an anomalous spike in demographic updates (11.1M on March 1st alone), likely related to fiscal year-end activities. September shows elevated enrolment volumes, possibly due to new academic year preparations.
+
+\subsection{Finding 6: Update Intensity Ratios}
+
+The ratio of updates to new enrolments serves as a proxy for Aadhaar ecosystem maturity.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig6_update_ratios.png}
+    \caption{Update-to-enrolment ratios by state. High ratios indicate established populations; low ratios indicate coverage expansion.}
+    \label{fig:ratios}
+\end{figure}
+
+\begin{insightbox}[Infrastructure Planning]
+\begin{itemize}
+    \item \textbf{High ratio states} (Manipur 55$\times$, Chandigarh 30$\times$): Need robust update infrastructure, fewer enrolment centers
+    \item \textbf{Low ratio states} (Bihar 7.9$\times$, Jharkhand 8.2$\times$): Still in coverage expansion, need more enrolment centers
+\end{itemize}
+\end{insightbox}
+
+\subsection{Finding 7: District-Level Hotspots}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig7_districts.png}
+    \caption{Top 15 districts by enrolment (left) and demographic updates (right). Urban districts like Thane, Pune, and Bengaluru dominate updates.}
+    \label{fig:districts}
+\end{figure}
+
+Urban metros (Thane, Pune, Surat, North West Delhi) dominate demographic updates, while rural districts in UP and Bihar lead in enrolments -- consistent with the lifecycle hypothesis.
+
+\subsection{Finding 8: School-Age Biometric Updates}
+
+A surprising finding is that \textbf{49.1\% of all biometric updates are for the 5--17 age group} -- disproportionately high compared to their population share.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig8_biometric_analysis.png}
+    \caption{Left: States with highest child biometric update percentages. Right: Monthly biometric updates by age group.}
+    \label{fig:biometric}
+\end{figure}
+
+\begin{insightbox}[Policy Recommendation]
+Given the heavy school-age biometric update demand, UIDAI should consider:
+\begin{itemize}
+    \item School-based biometric update camps at the start of academic years
+    \item Integration with Digital India education initiatives
+    \item Simplified update process for minors with parental consent
+\end{itemize}
+\end{insightbox}
+
+\subsection{Finding 9: Data Quality Opportunities}
+
+During preprocessing, significant data quality issues were discovered.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{fig9_data_quality.png}
+    \caption{Data quality issues: 68 unique state values found instead of expected 36--37.}
+    \label{fig:quality}
+\end{figure}
+
+\begin{insightbox}[Recommendation]
+Implement standardized dropdown menus for state/district selection at data entry points. A master data management system would eliminate these inconsistencies and improve analytical accuracy.
+\end{insightbox}
+
+% =============================================================================
+% CONCLUSIONS AND RECOMMENDATIONS
+% =============================================================================
+\section{Conclusions and Recommendations}
+
+\subsection{Summary of Key Findings}
+
+\begin{table}[H]
+\centering
+\caption{Summary of Key Findings and Implications}
+\rowcolors{2}{lightgray}{white}
+\begin{tabular}{p{3.5cm}p{4cm}p{5cm}}
+\toprule
+\rowcolor{primaryblue}
+\textcolor{white}{\textbf{Finding}} & \textcolor{white}{\textbf{Metric}} & \textcolor{white}{\textbf{Implication}} \\
+\midrule
+Baal Aadhaar Dominance & 65\% of enrolments are 0--5 & Birth registration linkage effective \\
+School-Driven Updates & 49\% of bio updates are 5--17 & Education schemes drive demand \\
+Adult Demo Updates & 90\% of demo updates are 18+ & Life event-driven patterns \\
+Weekend Demand & 172\% higher Saturday volume & Need extended weekend hours \\
+Geographic Concentration & Top 3 states = 40\% volume & Resource allocation priority \\
+Data Quality Issues & 68 state values (should be 36) & Standardization needed \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Actionable Recommendations}
+
+\begin{enumerate}
+    \item \textbf{Lifecycle-Based Service Design:} Create three distinct service tracks -- birth enrolment (hospital integration), school updates (camp-based), and adult services (flexible timing). This reduces wait times by channeling demographics to appropriate facilities.
+    
+    \item \textbf{Extended Weekend Hours:} Given the 172\% Saturday surge, high-volume urban centers should operate extended Saturday hours to serve the working population. This could reduce weekday congestion by 20--30\%.
+    
+    \item \textbf{School-Based Biometric Camps:} Partner with state education departments to conduct annual biometric update camps at schools during July--August (new academic year).
+    
+    \item \textbf{Predictive Infrastructure Planning:} Use the update-to-enrolment ratio as a maturity index. States with ratios $<$5 need more enrolment centers; states with ratios $>$20 need robust update infrastructure.
+    
+    \item \textbf{Data Quality Enhancement:} Implement standardized dropdown-based data entry for geographic fields to eliminate the 32 redundant state entries.
+\end{enumerate}
+
+\subsection{Future Analysis Opportunities}
+
+\begin{itemize}
+    \item Cross-reference with population census for coverage penetration analysis
+    \item Time-series forecasting to predict future demand by district
+    \item Clustering analysis to identify similar districts for targeted interventions
+    \item Integration with government scheme data to measure Aadhaar's welfare impact
+\end{itemize}
+
+% =============================================================================
+% APPENDIX: CODE
+% =============================================================================
+\newpage
+\section{Appendix: Analysis Code}
+
+The complete analysis was performed using Python with pandas, numpy, matplotlib, and seaborn. Below is the core analysis code (abbreviated). Full code available on GitHub upon request.
+
+\begin{lstlisting}[language=Python, caption={Core Analysis Code}]
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load and concatenate datasets
+enrol = pd.concat([pd.read_csv(f) for f in enrol_files])
+demo = pd.concat([pd.read_csv(f) for f in demo_files])
+bio = pd.concat([pd.read_csv(f) for f in bio_files])
+
+# Parse dates
+enrol['date'] = pd.to_datetime(enrol['date'], format='%d-%m-%Y')
+enrol['total_enrolment'] = enrol['age_0_5'] + enrol['age_5_17'] + enrol['age_18_greater']
+
+# State normalization
+state_mapping = {
+    'West Bengal': 'West Bengal', 
+    'west Bengal': 'West Bengal',
+    'WEST BENGAL': 'West Bengal', ...
+}
+enrol['state'] = enrol['state'].apply(lambda x: state_mapping.get(x, x))
+
+# Key calculations
+child_pct = enrol['age_0_5'].sum() / enrol['total_enrolment'].sum() * 100
+# Result: 65.3%
+
+# Weekly patterns
+dow_demo = demo.groupby('day_of_week')['total_demo_update'].sum()
+weekend_ratio = dow_demo['Saturday'] / dow_demo['Monday']  
+# Result: 3.14x (Saturday vs Monday)
+
+# State-level ratios
+state_ratios = state_demo_sum / state_enrol_sum
+# High ratio: Manipur (55x), Chandigarh (30x)
+# Low ratio: Bihar (7.9x), Jharkhand (8.2x)
+\end{lstlisting}
+
+\vspace{0.5cm}
+\noindent\textbf{Tools Used:} Python 3.x, pandas, numpy, matplotlib, seaborn, \LaTeX\\
+\textbf{Code Repository:} Available on GitHub upon request
+
+\end{document}
